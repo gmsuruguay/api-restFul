@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 }); */
 
-Route::group(['prefix'=>'/user'], function(){
+Route::group(['prefix'=>'auth'], function(){
     
-    Route::post('/login', 'AuthController@login');  
+    Route::post('login', 'AuthController@login');  
 
 });
