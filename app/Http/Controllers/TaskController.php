@@ -86,9 +86,33 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request)
     {
-        //
+        $task = Task::find($request->get('id'));
+
+        if (is_null($task)) {
+            return response([
+                'message' => 'Non-existent record !'
+            ], 422);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:255',
+            'status' => 'required|integer',
+        ]);
+
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }        
+       
+        $task->description = $request->description;
+        $task->status = $request->status;
+        $task->save();
+
+        return response([
+            'message' => 'Successfully updated task!'
+        ], 200);
     }
 
     /**
