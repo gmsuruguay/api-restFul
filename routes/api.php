@@ -23,6 +23,7 @@ Route::group([
     ], function(){
         Route::post('login', 'AuthController@login');  
         Route::post('signup', 'AuthController@signup');  
+        Route::post('logout', 'AuthController@logout')->middleware('auth:api');
 
 });
 
