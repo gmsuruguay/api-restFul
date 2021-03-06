@@ -60,24 +60,22 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Task  $task
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
+    public function show($id)
     {
+        $task = Task::find($id);
+        
+        if (is_null($task)) {
+            return response([
+                'message' => 'Non-existent record !'
+            ], 404);
+        }
+
         return response($task,200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -118,11 +116,23 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Task  $task
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+
+        if (is_null($task)) {
+            return response([
+                'message' => 'Non-existent record !'
+            ], 404);
+        }
+
+        $task->delete();
+
+        return response([
+            'message' => 'Successfully deleted task!'
+        ], 200);
     }
 }
