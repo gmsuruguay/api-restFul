@@ -65,7 +65,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return response($task,200);
     }
 
     /**
