@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
@@ -15,19 +16,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::where('id_user', Auth::id() )->get();
         return response($tasks,200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -50,6 +42,7 @@ class TaskController extends Controller
         $task = new Task();
         $task->description = $request->description;
         $task->status = $request->status;
+        $task->id_user = Auth::id();
         $task->save();
 
         return response([
@@ -65,7 +58,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id);
+        $task = Task::where('id_user', Auth::id() )->where('id',$id)->first();
         
         if (is_null($task)) {
             return response([
@@ -86,7 +79,8 @@ class TaskController extends Controller
      */
     public function update(Request $request)
     {
-        $task = Task::find($request->get('id'));
+        //$task = Task::find($request->get('id'));
+        $task = Task::where('id_user', Auth::id() )->where('id',$request->get('id'))->first();
 
         if (is_null($task)) {
             return response([
@@ -121,7 +115,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::find($id);
+        $task = Task::where('id_user', Auth::id() )->where('id',$id)->first();
 
         if (is_null($task)) {
             return response([
